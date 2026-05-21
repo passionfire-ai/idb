@@ -1,0 +1,20 @@
+name: Build IDB Companion for iOS
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build IDB Companion Binary
+        run: |
+          # Ép xcodebuild bỏ qua các lỗi phát sinh từ code cũ của Facebook và tập trung build idb_companion
+          xcodebuild -workspace idb.xcworkspace -scheme idb_companion -sdk iphoneos CONFIGURATION_BUILD_DIR=./build CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=NO GCC_TREAT_WARNINGS_AS_ERRORS=NO || xcodebuild -project idb.xcodeproj -scheme idb_companion -sdk iphoneos CONFIGURATION_BUILD_DIR=./build CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=NO GCC_TREAT_WARNINGS_AS_ERRORS=NO
+
+      - name: Upload Clean Binary to Windows
+        uses: actions/upload-artifact@v4
+        with:
+          name: idb_companion_clean
+          path: ./build/idb_companion
