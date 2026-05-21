@@ -1,0 +1,19 @@
+name: Build IDB Companion for iOS
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build IDB Companion Binary
+        run: |
+          xcodebuild -project idb.xcodeproj -scheme idb_companion -sdk iphoneos CONFIGURATION_BUILD_DIR=./build CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload Clean Binary to Windows
+        uses: actions/upload-artifact@v4
+        with:
+          name: idb_companion_clean
+          path: ./build/idb_companion
