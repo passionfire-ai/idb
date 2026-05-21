@@ -1,0 +1,22 @@
+name: Build IDB Companion for iOS
+on: [push, workflow_dispatch] # Cho phép bấm nút chạy thủ công
+
+jobs:
+  build:
+    runs-on: macos-14 # Ra lệnh cho GitHub bật một máy ảo Mac bản mới lên
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+
+      - name: Build IDB Companion Binary
+        run: |
+          xcodebuild -project idb.xcodeproj -scheme idb_companion -sdk iphoneos CONFIGURATION_BUILD_DIR=./build CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload Clean Binary to Windows
+        uses: actions/upload-artifact@v4
+        with:
+          name: idb_companion_clean
+          path: ./build/idb_companion
