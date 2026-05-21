@@ -10,7 +10,7 @@ jobs:
 
       - name: Build IDB Companion Binary
         run: |
-          xcodebuild -project idb.xcodeproj -scheme idb_companion -sdk iphoneos CONFIGURATION_BUILD_DIR=./build CODE_SIGNING_ALLOWED=NO
+          xcodebuild -project idb.xcodeproj -scheme idb_companion -sdk iphoneos CONFIGURATION_BUILD_DIR=./build CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=NO GCC_TREAT_WARNINGS_AS_ERRORS=NO || xcodebuild -workspace idb.xcworkspace -scheme idb_companion -sdk iphoneos CONFIGURATION_BUILD_DIR=./build CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=NO GCC_TREAT_WARNINGS_AS_ERRORS=NO
 
       - name: Upload Clean Binary to Windows
         uses: actions/upload-artifact@v4
